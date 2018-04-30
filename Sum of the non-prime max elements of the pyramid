@@ -1,0 +1,38 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import static java.util.Arrays.stream;
+
+public class Piramit {
+    private static int[][] arrlist;
+    private static ArrayList list = new ArrayList();
+
+    private static int maxTotal(int x, int y) throws IOException {
+    
+    if (x >= arrlist.length)
+        return 0;
+    int num = arrlist[x][y];
+    if (isPrime(num))
+        return 0;
+    else
+        return num + Math.max(maxTotal(x + 1, y), maxTotal(x + 1, y + 1));
+    }
+    
+    private static boolean isPrime(int num) {
+        for(int i = 2; i < num; i++){
+            if(num % i == 0)
+                return false;
+        }
+        return true;
+    }
+
+    public static void main(String[] args) throws Exception {
+        
+        int[][] data = Files.lines(Paths.get("pyramid.txt")).map(s -> stream(s.trim()
+            .split("\\s+")).mapToInt(Integer::parseInt).toArray()).toArray(int[][]::new);
+
+        arrlist = data;
+        System.out.println("max total = " + maxTotal(0, 0));
+    }  
+}
